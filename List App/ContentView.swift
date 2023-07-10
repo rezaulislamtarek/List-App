@@ -7,15 +7,46 @@
 
 import SwiftUI
 
+struct Task : Identifiable{
+    var id = UUID()
+    var taskName:String
+    var isComplite:Bool
+}
+
 struct ContentView: View {
+    
+    @State var taskList : [Task] = [
+        Task(taskName: "Learn Swift", isComplite: false),
+        Task(taskName: "Build SDK", isComplite: false),
+        Task(taskName: "SwiftUI implimentation", isComplite: false)
+    ]
+    
+    @State var task : String = ""
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, Media365")
+        VStack{
+            Spacer()
+            HStack{
+                TextField("Enter A Task", text:  $task)
+                    .padding()
+                Button("Add Task"){
+                    taskList.append(Task(taskName: task, isComplite: false))
+                    task = ""
+                }
+            }.padding()
+            List($taskList){ $item in
+                HStack(){
+                    Image(systemName: item.isComplite ? "checkmark.square.fill" : "square")
+                    Text(item.taskName)
+                    Spacer()
+                }.containerShape(Rectangle())
+                    .frame(maxWidth: .infinity)
+                 
+                .onTapGesture {
+                    item.isComplite.toggle()
+                }
+            }
         }
-        .padding()
     }
 }
 
