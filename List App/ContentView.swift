@@ -7,46 +7,27 @@
 
 import SwiftUI
 
-struct Task : Identifiable{
-    var id = UUID()
-    var taskName:String
-    var isComplite:Bool
-}
+ 
 
 struct ContentView: View {
     
-    @State var taskList : [Task] = [
-        Task(taskName: "Learn Swift", isComplite: false),
-        Task(taskName: "Build SDK", isComplite: false),
-        Task(taskName: "SwiftUI implimentation", isComplite: false)
-    ]
-    
-    @State var task : String = ""
+    @State var dateList : [Date] = []
     
     var body: some View {
-        VStack{
-            Spacer()
-            HStack{
-                TextField("Enter A Task", text:  $task)
-                    .padding()
-                Button("Add Task"){
-                    taskList.append(Task(taskName: task, isComplite: false))
-                    task = ""
-                }
-            }.padding()
-            List($taskList){ $item in
-                HStack(){
-                    Image(systemName: item.isComplite ? "checkmark.square.fill" : "square")
-                    Text(item.taskName)
-                    Spacer()
-                }.containerShape(Rectangle())
-                    .frame(maxWidth: .infinity)
-                 
-                .onTapGesture {
-                    item.isComplite.toggle()
+        NavigationView{
+            List(dateList, id: \.self){ date in
+                Text("\(date)")
+            }
+            .refreshable {
+                DispatchQueue.main.asyncAfter(deadline:.now()+1.0){
+                    dateList.append(Date())
                 }
             }
+            .navigationTitle("Pull To refresh")
+            .listStyle(.inset)
+             
         }
+        
     }
 }
 
