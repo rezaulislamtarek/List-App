@@ -53,6 +53,23 @@ struct ContentView: View {
                     Text(place.name)
                         .font(.title3)
                 }
+                .swipeActions(edge: .leading){
+                    Button{
+                        //action
+                        print("heart")
+                    }label: {
+                        Image(systemName: "heart")
+                    }.tint(Color.green)
+                }
+                .swipeActions(edge:.trailing){
+                    Button{
+                        //action
+                        print("Archive")
+                    }label: {
+                        Image(systemName: "archivebox")
+                    }
+                    .tint(.red)
+                }
                 .searchable(text: $search, placement: .navigationBarDrawer(displayMode: .always))
                     .onChange(of: search, perform: { value in
                         if !value.isEmpty && value.count >= 1{
@@ -67,6 +84,7 @@ struct ContentView: View {
                     
                 
             }
+            .listStyle(.inset)
             .navigationTitle("Places")
         }
         
